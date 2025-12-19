@@ -5,12 +5,16 @@ import struct
 import httpx
 from utils.config import settings
 
-# ------------------------------
-# 1. DIRECT UDP CONTROL TO ROVER
-# ------------------------------
+import urllib.parse
+import json
+import logging
+
+log = logging.getLogger("yamcs.command")
+logging.basicConfig(level=logging.INFO)
 
 ROVER_IP = "10.0.0.1"      # LeoRover address
 ROVER_TC_PORT = 10051      # Your bridge's TC listen port
+_seq = 0
 
 def _udp_send(packet: bytes):
     """Send raw UDP packet directly to the rover."""
@@ -32,17 +36,42 @@ async def send_stop():
 # -----------------------------------------------------
 
 async def send_yamcs_command(full_command_name: str, args: dict | None = None):
-    """Send command through YAMCS (DriveDistance, TurnAngle, TakePhoto, TimedCapture...)"""
+    global _seq
+    _seq += 1
+
+    # FULL XTCE PATH (this is critical)
+    xtce_path = f"/{settings.YAMCS_INSTANCE}/{full_command_name}"
+
+    # URL-ENCODE the command name
+    encoded_name = urllib.parse.quote(xtce_path, safe="")
 
     url = (
         f"http://{settings.YAMCS_HOST}:{settings.YAMCS_PORT}"
-        f"/api/commanding/instances/{settings.YAMCS_INSTANCE}/commands/{full_command_name}"
+        f"/api/processors/{settings.YAMCS_INSTANCE}/realtime/commands/{encoded_name}"
     )
 
-    payload = {"arguments": args or {}}
+    payload = {
+        "args": args or {},
+        "origin": "leorover-web-ui",
+        "sequenceNumber": _seq,
+    }
+
+    log.info("Issuing YAMCS command")
+    log.info("  XTCE path      : %s", xtce_path)
+    log.info("  Encoded name   : %s", encoded_name)
+    log.info("  URL            : %s", url)
+    log.info("  Payload        : %s", json.dumps(payload, indent=2))
 
     async with httpx.AsyncClient() as client:
-        resp = await client.post(url, json=payload)
+        resp = await client.post(
+            url,
+            json=payload,
+            headers={"Content-Type": "application/json"},
+        )
+
+        log.info("YAMCS response status: %s", resp.status_code)
+        log.info("YAMCS response body  : %s", resp.text)
+
         resp.raise_for_status()
         return resp.json()
 
