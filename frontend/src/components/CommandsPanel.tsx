@@ -204,7 +204,7 @@ export default function CommandPanel() {
         <button
           onClick={takePhoto}
           disabled={!!busy}
-          className="w-full rounded-md py-2 font-semibold border border-gray-700 bg-gray-900/40 hover:bg-gray-900/60 disabled:opacity-50"
+          className="w-full rounded-md py-2 font-semibold border border-gray-700 bg-gray-900/40 hover:bg-gray-900/100 disabled:opacity-50"
         >
           Take Photo
         </button>
@@ -321,7 +321,7 @@ export default function CommandPanel() {
             <button
               onClick={drive}
               disabled={!!busy}
-              className="w-full rounded-md py-2 border border-gray-700 bg-gray-900/40 hover:bg-gray-900/60 disabled:opacity-50"
+              className="w-full rounded-md py-2 border border-gray-700 bg-gray-900/40 hover:bg-gray-900/100 disabled:opacity-50"
             >
               Execute Drive
             </button>
@@ -357,7 +357,7 @@ export default function CommandPanel() {
             <button
               onClick={turn}
               disabled={!!busy}
-              className="w-full rounded-md py-2 border border-gray-700 bg-gray-900/40 hover:bg-gray-900/60 disabled:opacity-50"
+              className="w-full rounded-md py-2 border border-gray-700 bg-gray-900/40 hover:bg-gray-900/100 disabled:opacity-50"
             >
               Execute Turn
             </button>
