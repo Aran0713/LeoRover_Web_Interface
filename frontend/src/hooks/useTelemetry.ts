@@ -12,6 +12,9 @@ export interface Telemetry {
   battery: number;
   last_photo_url?: string | null;
   last_photo_time_unix?: number | null;
+  last_timed_csv_bucket?: string | null;
+  last_timed_csv_object?: string | null;
+  last_timed_csv_url?: string | null;
 }
 
 const WS_URL = "ws://10.0.0.186:8000/ws/telemetry";

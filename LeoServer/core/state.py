@@ -14,6 +14,10 @@ telemetry_state = {
     "battery": 0.0,
     "last_photo_url": None,
     "last_photo_time_unix": None,
+    "last_timed_csv_bucket": None,
+    "last_timed_csv_object": None,
+    "last_timed_csv_url": None,
+    
 }
 
 # Joystick control state

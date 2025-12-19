@@ -16,6 +16,10 @@ PARAM_NAMES = [
     "/leorover/ODOM/battery",
     "/leorover/ODOM/last_photo_url",
     "/leorover/ODOM/last_photo_time_unix",
+    "/leorover/ODOM/last_timed_csv_bucket",
+    "/leorover/ODOM/last_timed_csv_object",
+    "/leorover/ODOM/last_timed_csv_url",
+    
 ]
 
 
@@ -119,6 +123,12 @@ async def yamcs_telemetry_listener():
                             telemetry_state["last_photo_url"] = val
                         elif name.endswith("/last_photo_time_unix"):
                             telemetry_state["last_photo_time_unix"] = val
+                        elif name.endswith("/last_timed_csv_bucket"):
+                            telemetry_state["last_timed_csv_bucket"] = val
+                        elif name.endswith("/last_timed_csv_object"):
+                            telemetry_state["last_timed_csv_object"] = val
+                        elif name.endswith("/last_timed_csv_url"):
+                            telemetry_state["last_timed_csv_url"] = val
 
                 except Exception as e:
                     print("[TELEMETRY] Error parsing message:", e)
